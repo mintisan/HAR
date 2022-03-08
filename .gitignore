@@ -1,0 +1,9 @@
+*.txt
+*.h5
+*.onnx
+*.png
+
+./UCI HAR Dataset
+
+./__pycache__/*
+*.pyc
