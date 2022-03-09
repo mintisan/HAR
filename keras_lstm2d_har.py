@@ -11,6 +11,8 @@ from keras.layers.convolutional import MaxPooling2D
 from keras.utils.vis_utils import plot_model
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn import metrics
 
 from uci_data_loader import *  # load UCI dataset
 
@@ -80,6 +82,39 @@ def run_experiment(data_dir=""):
     plt.close()
     plt.clf()
 
+    # For LSTM2D reshape
+    n_steps, n_length, n_features = 4, 32, testX.shape[2]
+    testX = testX.reshape((testX.shape[0], n_steps, 1, n_length, n_features))
+
+    # confusion matrix
+    LABELS = ['WALKING',
+              'WALKING_UPSTAIRS',
+              'WALKING_DOWNSTAIRS',
+              'SITTING',
+              'STANDING',
+              'LAYING']
+    y_pred_test = model.predict(testX)
+    # Take the class with the highest probability from the test predictions
+    max_y_pred_test = np.argmax(y_pred_test, axis=1)
+    max_y_test = np.argmax(testy, axis=1)
+
+    matrix = metrics.confusion_matrix(max_y_test, max_y_pred_test)
+    plt.figure(figsize=(6, 4))
+    sns.heatmap(matrix,
+                cmap='PiYG_r',
+                linecolor='white',
+                linewidths=1,
+                xticklabels=LABELS,
+                yticklabels=LABELS,
+                annot=True,
+                fmt='d')
+    plt.title('Confusion Matrix')
+    plt.ylabel('True Label')
+    plt.xlabel('Predicted Label')
+    plt.savefig("keras_lstm2d_har_model_confusion_matrix" + '.png')
+    # plt.show()
+    plt.close()
+    plt.clf()
 
 data_dir = r"G:\HAR\HAR"
 if __name__ == '__main__':
