@@ -29,4 +29,6 @@ uci_data_loader.py
 python keras_cnn_har.py
 python pytorch_cnn_har.py
 python keras_lstm2d_har.py
+python keras_lstm_har.py
+python keras_gru_har.py
 ```
